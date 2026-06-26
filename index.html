@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CAP PRO — Exámenes Oficiales Conductores Profesionales</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --verde:#1B4332;--verde2:#0A1F14;--verde3:#132A1E;--verde4:#2E4A3A;
+  --dorado:#C9A84C;--dorado2:#a8893e;--crema:#F8F5EF;--negro:#0D2318;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--negro);color:var(--crema);min-height:100vh;}
+.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;}
+.serif{font-family:'DM Serif Display',serif;}
+
+/* NAV */
+nav{background:var(--verde2);border-bottom:2px solid var(--verde4);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.logo-box{width:38px;height:38px;background:var(--verde);border:1px solid var(--dorado);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:var(--dorado);font-size:1rem;}
+.logo-text{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--crema);letter-spacing:.08em;}
+.logo-text span{color:var(--dorado);}
+.logo-sub{font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dorado);opacity:.7;}
+.nav-links{display:flex;gap:24px;align-items:center;}
+.nav-link{color:var(--crema);text-decoration:none;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid transparent;transition:all .15s;cursor:pointer;}
+.nav-link:hover,.nav-link.active{color:var(--dorado);border-color:var(--dorado);}
+.btn-nav{background:var(--dorado);color:#1C1C1C;border:none;padding:8px 20px;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:all .18s;}
+.btn-nav:hover{background:var(--dorado2);}
+
+/* PAGES */
+.page{display:none;animation:fadeUp .4s ease;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* BUTTONS */
+.btn-dorado{background:var(--dorado);color:#1C1C1C;border:none;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:all .18s;}
+.btn-dorado:hover{background:var(--dorado2);transform:translateY(-1px);}
+.btn-verde{background:var(--verde);color:var(--crema);border:none;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:all .18s;}
+.btn-verde:hover{background:#0d2b1e;transform:translateY(-1px);}
+.btn-ghost{background:transparent;border:2px solid var(--dorado);color:var(--dorado);padding:11px 26px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;letter-spacing:.06em;transition:all .18s;}
+.btn-ghost:hover{background:var(--dorado);color:#1C1C1C;}
+.btn-stripe{background:#635BFF;color:#fff;border:none;padding:13px 28px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:all .18s;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-stripe:hover{background:#4f48e2;}
+
+/* HERO */
+.hero{background:var(--negro);padding:80px 24px 70px;position:relative;overflow:hidden;text-align:center;}
+.hero::before{content:'CAP PRO';position:absolute;right:-20px;top:50%;transform:translateY(-50%) rotate(-90deg);font-family:'Bebas Neue',sans-serif;font-size:20rem;color:rgba(201,168,76,.04);line-height:1;white-space:nowrap;pointer-events:none;}
+.hero-eyebrow{font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dorado);margin-bottom:18px;font-weight:600;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,10vw,6.5rem);line-height:.95;margin-bottom:24px;letter-spacing:.04em;}
+.hero h1 .gold{color:var(--dorado);}
+.hero-desc{font-size:1rem;color:rgba(248,245,239,.65);max-width:500px;margin:0 auto 32px;line-height:1.75;font-weight:300;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:48px;flex-wrap:wrap;}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--dorado);line-height:1;}
+.stat-label{font-size:.65rem;color:rgba(248,245,239,.4);text-transform:uppercase;letter-spacing:.14em;margin-top:3px;}
+
+/* MODALIDADES */
+.modalidades{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:2px solid var(--verde4);}
+.modal-card{padding:36px 28px;border-right:2px solid var(--verde4);cursor:pointer;transition:background .18s;background:var(--verde2);}
+.modal-card:last-child{border-right:none;}
+.modal-card:hover{background:var(--verde);}
+.modal-icon{font-size:1.8rem;margin-bottom:12px;}
+.modal-title{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:8px;color:var(--crema);}
+.modal-desc{font-size:.82rem;color:rgba(248,245,239,.55);line-height:1.6;}
+.modal-link{font-size:.7rem;font-weight:600;color:var(--dorado);margin-top:12px;letter-spacing:.08em;}
+
+/* CCAA */
+.ccaa-section{padding:56px 24px;background:var(--negro);}
+.section-title{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:8px;color:var(--crema);}
+.eyebrow{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dorado);font-weight:600;display:block;margin-bottom:8px;}
+.ccaa-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.ccaa-tag{background:var(--verde3);border:1.5px solid var(--verde4);padding:7px 14px;font-size:.8rem;font-weight:500;cursor:pointer;transition:all .15s;color:var(--crema);}
+.ccaa-tag:hover{background:var(--dorado);color:#1C1C1C;border-color:var(--dorado);}
+
+/* CTA BANNER */
+.cta-banner{background:var(--verde);padding:52px 24px;border-top:2px solid var(--verde4);border-bottom:2px solid var(--verde4);}
+.cta-inner{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--dorado);letter-spacing:.05em;line-height:1.05;}
+.cta-sub{font-size:.88rem;color:rgba(248,245,239,.7);margin-top:6px;}
+
+/* CATÁLOGO */
+.catalogo-page{max-width:1000px;margin:0 auto;padding:40px 24px;}
+.page-title{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:4px;color:var(--crema);}
+.page-sub{font-size:.85rem;color:rgba(248,245,239,.5);margin-bottom:24px;}
+.filtros{background:var(--verde2);border:1.5px solid var(--verde4);padding:16px;margin-bottom:20px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.filtro-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dorado);font-weight:600;display:block;margin-bottom:5px;}
+select{width:100%;padding:9px 12px;border:1.5px solid var(--verde4);background:var(--negro);color:var(--crema);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;}
+select:focus{border-color:var(--dorado);}
+.examenes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.examen-card{background:var(--verde2);border:1.5px solid var(--verde4);padding:16px;cursor:pointer;transition:all .18s;}
+.examen-card:hover{border-color:var(--dorado);transform:translateY(-2px);}
+.examen-tags{display:flex;justify-content:space-between;margin-bottom:10px;}
+.tag{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;}
+.tag-ccaa{background:var(--negro);color:var(--dorado);border:1px solid var(--verde4);}
+.tag-modal{color:var(--crema);}
+.tag-merc{background:var(--verde);}
+.tag-viaj{background:#1A2B4A;}
+.tag-amp{background:#4A3010;}
+.examen-titulo{font-family:'DM Serif Display',serif;font-size:.98rem;margin-bottom:4px;color:var(--crema);}
+.examen-sub{font-size:.76rem;color:rgba(248,245,239,.45);margin-bottom:10px;}
+.examen-stats{display:flex;gap:14px;border-top:1px solid var(--verde4);padding-top:9px;font-size:.76rem;}
+.stat-ok{color:var(--dorado);font-weight:600;}
+.stat-grey{color:rgba(248,245,239,.35);}
+
+/* SIMULADOR */
+.sim-page{max-width:680px;margin:0 auto;padding:40px 24px;}
+.pregunta-card{background:var(--verde2);border:1.5px solid var(--verde4);padding:20px;margin-bottom:14px;}
+.pregunta-header{display:flex;justify-content:space-between;margin-bottom:10px;}
+.pregunta-text{font-size:.92rem;color:var(--crema);margin-bottom:12px;line-height:1.6;font-weight:500;}
+.opcion{width:100%;text-align:left;padding:9px 13px;border:1.5px solid var(--verde4);background:var(--negro);color:var(--crema);font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;transition:all .15s;margin-bottom:6px;display:block;}
+.opcion:hover{border-color:var(--dorado);}
+.opcion.sel{border-color:var(--dorado);background:var(--verde3);}
+.opcion.ok{border-color:#40916C;background:#0A2E1E;color:#40916C;}
+.opcion.err{border-color:#DC2626;background:#2A0A0A;color:#F87171;}
+.resultado-box{background:var(--verde2);border:2px solid var(--dorado);padding:24px;text-align:center;margin-top:16px;}
+.resultado-num{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:.04em;line-height:1;}
+
+/* PRECIOS */
+.precios-page{max-width:800px;margin:0 auto;padding:40px 24px;}
+.planes-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:36px;}
+.plan-card{background:var(--verde2);border:2px solid var(--verde4);padding:26px 22px;cursor:pointer;transition:all .2s;position:relative;}
+.plan-card:hover{transform:translateY(-3px);}
+.plan-card.selected{border-color:var(--dorado);background:var(--verde3);}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--dorado);color:#1C1C1C;font-size:.58rem;font-weight:700;letter-spacing:.14em;padding:3px 12px;text-transform:uppercase;white-space:nowrap;}
+.plan-nombre{font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:8px;color:var(--crema);}
+.plan-precio{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--dorado);letter-spacing:.04em;}
+.plan-periodo{font-size:.75rem;color:rgba(248,245,239,.4);}
+.plan-features{border-top:1px solid var(--verde4);padding-top:14px;margin-top:14px;}
+.feature{display:flex;gap:8px;margin-bottom:8px;font-size:.8rem;color:var(--crema);align-items:flex-start;}
+.feature-ok{color:var(--dorado);font-weight:700;flex-shrink:0;}
+.checkout-form{background:var(--verde2);border:1.5px solid var(--verde4);padding:24px;}
+.form-title{font-family:'DM Serif Display',serif;font-size:1.2rem;text-align:center;margin-bottom:20px;color:var(--crema);}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dorado);display:block;margin-bottom:5px;}
+input{width:100%;padding:10px 13px;border:1.5px solid var(--verde4);background:var(--negro);color:var(--crema);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;}
+input:focus{border-color:var(--dorado);}
+input::placeholder{color:rgba(248,245,239,.3);}
+.garantias{display:flex;gap:24px;justify-content:center;margin-top:28px;padding-top:24px;border-top:1px solid var(--verde4);flex-wrap:wrap;}
+.garantia{text-align:center;}
+.garantia-icon{font-size:1.4rem;margin-bottom:4px;}
+.garantia-title{font-size:.75rem;font-weight:700;color:var(--crema);}
+.garantia-sub{font-size:.68rem;color:rgba(248,245,239,.4);}
+
+/* ÉXITO */
+.exito-box{max-width:480px;margin:60px auto;text-align:center;padding:40px 32px;background:var(--verde2);border:2px solid var(--dorado);}
+.exito-check{width:72px;height:72px;border-radius:50%;background:var(--verde);border:2px solid var(--dorado);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem;}
+.exito-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--dorado);letter-spacing:.05em;margin-bottom:8px;}
+.exito-desc{font-size:.88rem;color:rgba(248,245,239,.65);line-height:1.7;margin-bottom:20px;}
+.exito-list{background:var(--negro);border:1px solid var(--verde4);padding:14px 18px;margin-bottom:20px;text-align:left;}
+.exito-item{display:flex;gap:8px;font-size:.8rem;color:var(--crema);margin-bottom:7px;}
+.exito-item span:first-child{color:var(--dorado);}
+
+/* INFO BANNER */
+.info-banner{background:var(--verde3);border:1.5px solid var(--dorado);padding:10px 16px;margin-bottom:16px;font-size:.78rem;color:var(--dorado);}
+
+/* FOOTER */
+footer{background:var(--verde2);border-top:1px solid var(--verde4);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:.7rem;color:rgba(248,245,239,.35);}
+
+/* DETALLE */
+.detalle-page{max-width:720px;margin:0 auto;padding:40px 24px;}
+.detalle-header{padding:28px 28px;margin-bottom:18px;}
+.detalle-eyebrow{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(248,245,239,.55);margin-bottom:8px;}
+.detalle-title{font-family:'DM Serif Display',serif;font-size:1.7rem;margin-bottom:6px;color:var(--crema);}
+.detalle-sub{font-size:.85rem;color:rgba(248,245,239,.6);}
+.detalle-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.dstat{background:var(--verde2);border:1px solid var(--verde4);padding:14px;text-align:center;}
+.dstat-label{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dorado);margin-bottom:4px;}
+.dstat-val{font-family:'DM Serif Display',serif;font-size:1.5rem;}
+.lock-box{background:var(--verde3);border:2px solid var(--dorado);padding:20px;text-align:center;}
+.lock-title{font-family:'DM Serif Display',serif;font-size:1.05rem;margin-bottom:8px;color:var(--crema);}
+.lock-sub{font-size:.82rem;color:rgba(248,245,239,.5);margin-bottom:14px;}
+
+@media(max-width:640px){
+  .modalidades{grid-template-columns:1fr;}
+  .modal-card{border-right:none;border-bottom:2px solid var(--verde4);}
+  .planes-grid{grid-template-columns:1fr;}
+  .detalle-stats{grid-template-columns:repeat(2,1fr);}
+  .filtros{grid-template-columns:1fr;}
+  .cta-inner{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" onclick="showPage('inicio')">
+    <div class="logo-box">CAP</div>
+    <div>
+      <div class="logo-text">CAP <span>PRO</span></div>
+      <div class="logo-sub">Conductores Profesionales · España</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <span class="nav-link active" onclick="showPage('inicio')">Inicio</span>
+    <span class="nav-link" onclick="showPage('catalogo')">Catálogo</span>
+    <span class="nav-link" onclick="showPage('simulador')">Simulador</span>
+    <span class="nav-link" onclick="showPage('precios')">Precios</span>
+    <button class="btn-nav" id="nav-cta" onclick="showPage('precios')">Suscribirse</button>
+  </div>
+</nav>
+
+<!-- INICIO -->
+<div id="page-inicio" class="page active">
+  <div class="hero">
+    <div class="hero-eyebrow">▸ Ministerio de Transportes · RD 284/2021</div>
+    <h1>TODOS LOS<br/><span class="gold">EXÁMENES</span><br/><span class="gold">OFICIALES CAP</span></h1>
+    <p class="hero-desc">El archivo completo de convocatorias de <strong>Mercancías y Viajeros</strong> de las <strong>19 comunidades autónomas</strong>. Banco oficial con más de 8.000 preguntas.</p>
+    <div class="hero-btns">
+      <button class="btn-dorado" onclick="showPage('catalogo')">Ver Exámenes →</button>
+      <button class="btn-ghost" onclick="showPage('simulador')">Simulador gratis</button>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-val" id="counter">0</div><div class="stat-label">Preguntas banco oficial</div></div>
+      <div><div class="stat-val">45+</div><div class="stat-label">Convocatorias archivo</div></div>
+      <div><div class="stat-val">19</div><div class="stat-label">Comunidades Autónomas</div></div>
+      <div><div class="stat-val">2009–2025</div><div class="stat-label">Años cubiertos</div></div>
+    </div>
+  </div>
+
+  <div class="modalidades">
+    <div class="modal-card" onclick="filterAndGo('Mercancías')">
+      <div class="modal-icon">📦</div>
+      <div class="modal-title">Mercancías</div>
+      <p class="modal-desc">Vehículos de transporte de mercancías. C, C1, C+E, C1+E.</p>
+      <div class="modal-link">VER EXÁMENES →</div>
+    </div>
+    <div class="modal-card" onclick="filterAndGo('Viajeros')">
+      <div class="modal-icon">🚌</div>
+      <div class="modal-title">Viajeros</div>
+      <p class="modal-desc">Autobuses y autocares. D, D1, D+E, D1+E.</p>
+      <div class="modal-link">VER EXÁMENES →</div>
+    </div>
+    <div class="modal-card" onclick="filterAndGo('Ampliación')">
+      <div class="modal-icon">🔄</div>
+      <div class="modal-title">Ampliación</div>
+      <p class="modal-desc">25 preguntas para ampliar el CAP a la otra modalidad.</p>
+      <div class="modal-link">VER EXÁMENES →</div>
+    </div>
+  </div>
+
+  <div class="ccaa-section">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4px;">
+      <div>
+        <span class="eyebrow">Cobertura nacional</span>
+        <h2 class="section-title">19 Comunidades Autónomas</h2>
+      </div>
+      <button class="btn-ghost" style="padding:8px 16px;font-size:.74rem;" onclick="showPage('catalogo')">Ver catálogo</button>
+    </div>
+    <div class="ccaa-grid" id="ccaa-inicio"></div>
+  </div>
+
+  <div class="cta-banner">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-title">ACCESO COMPLETO<br/>DESDE 49,99 €/MES</div>
+        <div class="cta-sub">Sin permanencia · IVA incluido · Cancela cuando quieras</div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn-dorado" onclick="showPage('precios')">Ver Planes</button>
+        <button class="btn-ghost" onclick="showPage('simulador')">Probar gratis</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2025 CAP PRO · Plataforma privada de estudio · No afiliada al Ministerio de Transportes</span>
+    <span>Regulado por RD 284/2021 · Pagos por Stripe</span>
+  </footer>
+</div>
+
+<!-- CATÁLOGO -->
+<div id="page-catalogo" class="page">
+  <div class="catalogo-page">
+    <span class="eyebrow">Archivo oficial · Ministerio de Transportes</span>
+    <h2 class="page-title">Catálogo de Exámenes CAP</h2>
+    <p class="page-sub">Convocatorias de las 19 CCAA · RD 1032/2007 y RD 284/2021</p>
+    <div class="filtros">
+      <div>
+        <span class="filtro-label">Comunidad Autónoma</span>
+        <select id="fil-ccaa" onchange="renderExamenes()">
+          <option value="">Todas</option>
+        </select>
+      </div>
+      <div>
+        <span class="filtro-label">Modalidad</span>
+        <select id="fil-modal" onchange="renderExamenes()">
+          <option value="">Todas</option>
+          <option>Mercancías</option>
+          <option>Viajeros</option>
+          <option>Ampliación</option>
+        </select>
+      </div>
+      <div>
+        <span class="filtro-label">Normativa</span>
+        <select id="fil-norma" onchange="renderExamenes()">
+          <option value="">Todas</option>
+          <option>RD 1032/2007</option>
+          <option>RD 284/2021</option>
+        </select>
+      </div>
+      <div>
+        <span class="filtro-label">Año</span>
+        <select id="fil-anyo" onchange="renderExamenes()">
+          <option value="">Todos</option>
+          <option>2009</option><option>2010</option><option>2011</option>
+          <option>2012</option><option>2013</option><option>2022</option>
+          <option>2023</option><option>2024</option>
+        </select>
+      </div>
+    </div>
+    <div id="cat-info" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:.8rem;color:rgba(248,245,239,.5);"></div>
+    <div class="examenes-grid" id="examenes-grid"></div>
+  </div>
+</div>
+
+<!-- DETALLE -->
+<div id="page-detalle" class="page">
+  <div class="detalle-page">
+    <button class="btn-ghost" style="margin-bottom:24px;padding:7px 16px;font-size:.74rem;" onclick="showPage('catalogo')">← Volver al catálogo</button>
+    <div id="detalle-content"></div>
+  </div>
+</div>
+
+<!-- SIMULADOR -->
+<div id="page-simulador" class="page">
+  <div class="sim-page">
+    <span class="eyebrow" style="text-align:center;display:block;margin-bottom:6px;">Demo gratuita · Banco oficial</span>
+    <h2 class="page-title" style="text-align:center;margin-bottom:6px;">Simulador CAP</h2>
+    <p class="page-sub" style="text-align:center;margin-bottom:28px;">7 preguntas reales · +1 acierto / −0,5 error · Mínimo: 50/100 pts</p>
+    <div id="sim-preguntas"></div>
+    <div style="text-align:center;margin-top:20px;" id="sim-acciones"></div>
+    <div id="sim-resultado"></div>
+  </div>
+</div>
+
+<!-- PRECIOS -->
+<div id="page-precios" class="page">
+  <div class="precios-page">
+    <span class="eyebrow" style="text-align:center;display:block;margin-bottom:8px;">Sin permanencia · Cancela cuando quieras</span>
+    <h2 class="page-title" style="text-align:center;margin-bottom:4px;">Planes CAP PRO</h2>
+    <p class="page-sub" style="text-align:center;margin-bottom:32px;">IVA incluido · Stripe transfiere a tu cuenta bancaria cada 7 días</p>
+    <div class="planes-grid" id="planes-grid"></div>
+    <div class="checkout-form">
+      <div class="form-title">Crear cuenta</div>
+      <div id="plan-sel-info" style="text-align:center;font-size:.72rem;color:var(--dorado);margin-bottom:16px;letter-spacing:.1em;"></div>
+      <div class="form-group">
+        <label class="form-label">Nombre completo *</label>
+        <input type="text" id="inp-nombre" placeholder="Pedro García López"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email *</label>
+        <input type="email" id="inp-email" placeholder="pedro@empresa.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Empresa / Autoescuela (opcional)</label>
+        <input type="text" id="inp-empresa" placeholder="Transportes García S.L."/>
+      </div>
+      <div class="info-banner">🔒 Stripe envía el recibo automáticamente a tu email · Puedes añadir NIF/CIF tras la compra</div>
+      <button class="btn-stripe" onclick="iniciarPago()">🔒 Pagar con Stripe</button>
+      <div class="garantias">
+        <div class="garantia"><div class="garantia-icon">🔒</div><div class="garantia-title">Pago seguro</div><div class="garantia-sub">Stripe PCI DSS</div></div>
+        <div class="garantia"><div class="garantia-icon">↩</div><div class="garantia-title">Sin permanencia</div><div class="garantia-sub">Cancela cuando quieras</div></div>
+        <div class="garantia"><div class="garantia-icon">🏦</div><div class="garantia-title">Cobro en cuenta</div><div class="garantia-sub">Cada 7 días</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ÉXITO -->
+<div id="page-exito" class="page">
+  <div class="exito-box">
+    <div class="exito-check">✓</div>
+    <div class="exito-title">¡ACTIVO!</div>
+    <p class="exito-desc">Tu suscripción está activa. Stripe ha enviado el recibo a <strong id="exito-email"></strong>.</p>
+    <div class="exito-list">
+      <div class="exito-item"><span>✓</span><span>Descargar todos los exámenes en PDF</span></div>
+      <div class="exito-item"><span>✓</span><span>Simulador ilimitado con corrección</span></div>
+      <div class="exito-item"><span>✓</span><span>Filtrar por CCAA, modalidad y año</span></div>
+      <div class="exito-item"><span>✓</span><span>Soporte prioritario</span></div>
+    </div>
+    <button class="btn-dorado" style="width:100%;margin-bottom:10px;" onclick="showPage('catalogo')">Ir al Catálogo →</button>
+    <button class="btn-ghost" style="width:100%;" onclick="showPage('simulador')">Simulador</button>
+  </div>
+</div>
+
+<script>
+// ── DATOS ──────────────────────────────────────────────────────────────────
+const CCAA = ["Andalucía","Aragón","Asturias","Baleares","Canarias","Cantabria",
+  "Castilla-La Mancha","Castilla y León","Cataluña","Extremadura","Galicia",
+  "La Rioja","Madrid","Murcia","Navarra","País Vasco","Valencia","Ceuta","Melilla"];
+
+const EXAMENES = [
+  {id:1,ccaa:"Andalucía",año:2010,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:312,total:480},
+  {id:2,ccaa:"Andalucía",año:2011,conv:"2ª",modal:"Viajeros",norma:"RD 1032/2007",preguntas:100,aprobados:187,total:290},
+  {id:3,ccaa:"Andalucía",año:2022,conv:"3ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:298,total:430},
+  {id:4,ccaa:"Andalucía",año:2024,conv:"2ª",modal:"Ampliación",norma:"RD 284/2021",preguntas:25,aprobados:89,total:110},
+  {id:5,ccaa:"Aragón",año:2011,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:98,total:155},
+  {id:6,ccaa:"Aragón",año:2023,conv:"1ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:110,total:178},
+  {id:7,ccaa:"Asturias",año:2010,conv:"3ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:55,total:90},
+  {id:8,ccaa:"Asturias",año:2022,conv:"2ª",modal:"Viajeros",norma:"RD 284/2021",preguntas:100,aprobados:48,total:75},
+  {id:9,ccaa:"Baleares",año:2011,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:70,total:118},
+  {id:10,ccaa:"Baleares",año:2023,conv:"3ª",modal:"Viajeros",norma:"RD 284/2021",preguntas:100,aprobados:58,total:92},
+  {id:11,ccaa:"Canarias",año:2010,conv:"2ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:89,total:142},
+  {id:12,ccaa:"Canarias",año:2024,conv:"1ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:102,total:161},
+  {id:13,ccaa:"Cantabria",año:2011,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:44,total:68},
+  {id:14,ccaa:"Cantabria",año:2023,conv:"2ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:51,total:80},
+  {id:15,ccaa:"Castilla-La Mancha",año:2010,conv:"2ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:120,total:195},
+  {id:16,ccaa:"Castilla-La Mancha",año:2022,conv:"4ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:135,total:210},
+  {id:17,ccaa:"Castilla y León",año:2010,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:165,total:258},
+  {id:18,ccaa:"Castilla y León",año:2023,conv:"2ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:180,total:285},
+  {id:19,ccaa:"Cataluña",año:2010,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:420,total:640},
+  {id:20,ccaa:"Cataluña",año:2011,conv:"4ª",modal:"Viajeros",norma:"RD 1032/2007",preguntas:100,aprobados:290,total:445},
+  {id:21,ccaa:"Cataluña",año:2022,conv:"3ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:445,total:680},
+  {id:22,ccaa:"Cataluña",año:2024,conv:"1ª",modal:"Ampliación",norma:"RD 284/2021",preguntas:25,aprobados:155,total:195},
+  {id:23,ccaa:"Extremadura",año:2011,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:78,total:122},
+  {id:24,ccaa:"Extremadura",año:2023,conv:"2ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:90,total:141},
+  {id:25,ccaa:"Galicia",año:2010,conv:"2ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:195,total:305},
+  {id:26,ccaa:"Galicia",año:2022,conv:"3ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:210,total:330},
+  {id:27,ccaa:"La Rioja",año:2011,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:38,total:58},
+  {id:28,ccaa:"La Rioja",año:2023,conv:"2ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:42,total:65},
+  {id:29,ccaa:"Madrid",año:2009,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:510,total:780},
+  {id:30,ccaa:"Madrid",año:2011,conv:"5ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:488,total:745},
+  {id:31,ccaa:"Madrid",año:2022,conv:"1ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:540,total:825},
+  {id:32,ccaa:"Madrid",año:2023,conv:"2ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:560,total:855},
+  {id:33,ccaa:"Madrid",año:2024,conv:"3ª",modal:"Ampliación",norma:"RD 284/2021",preguntas:25,aprobados:185,total:235},
+  {id:34,ccaa:"Murcia",año:2010,conv:"2ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:118,total:185},
+  {id:35,ccaa:"Murcia",año:2024,conv:"1ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:130,total:205},
+  {id:36,ccaa:"Navarra",año:2011,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:92,total:145},
+  {id:37,ccaa:"Navarra",año:2023,conv:"3ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:105,total:165},
+  {id:38,ccaa:"País Vasco",año:2010,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:220,total:345},
+  {id:39,ccaa:"País Vasco",año:2022,conv:"4ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:245,total:385},
+  {id:40,ccaa:"País Vasco",año:2024,conv:"2ª",modal:"Ampliación",norma:"RD 284/2021",preguntas:25,aprobados:98,total:125},
+  {id:41,ccaa:"Valencia",año:2010,conv:"1ª",modal:"Mercancías",norma:"RD 1032/2007",preguntas:100,aprobados:335,total:510},
+  {id:42,ccaa:"Valencia",año:2022,conv:"5ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:365,total:560},
+  {id:43,ccaa:"Valencia",año:2024,conv:"1ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:390,total:598},
+  {id:44,ccaa:"Ceuta",año:2023,conv:"2ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:28,total:44},
+  {id:45,ccaa:"Melilla",año:2023,conv:"1ª",modal:"Mercancías",norma:"RD 284/2021",preguntas:100,aprobados:22,total:36},
+];
+
+const PREGUNTAS = [
+  {q:"¿Cuántas preguntas tiene el examen CAP estándar?",ops:["50","75","100","200"],ok:2,tema:"Normativa"},
+  {q:"¿Qué puntuación mínima se necesita para aprobar el CAP?",ops:["40 puntos","50 puntos","60 puntos","70 puntos"],ok:1,tema:"Normativa"},
+  {q:"¿Cómo penaliza un error en el examen CAP?",ops:["-1 punto","-0,25 puntos","-0,5 puntos","No penaliza"],ok:2,tema:"Normativa"},
+  {q:"¿Cuántas horas dura el curso de cualificación inicial ordinaria según el RD 284/2021?",ops:["140 h","200 h","280 h","320 h"],ok:2,tema:"Formación"},
+  {q:"¿Cada cuánto tiempo debe renovarse el CAP mediante formación continua?",ops:["3 años","5 años","7 años","10 años"],ok:1,tema:"Formación"},
+  {q:"¿Qué organismo coordina las convocatorias CAP en España?",ops:["DGT","Ministerio de Transportes","AESV","Cada CCAA"],ok:1,tema:"Normativa"},
+  {q:"¿Cuántas horas de formación continua son obligatorias cada 5 años?",ops:["21 h","35 h","40 h","70 h"],ok:1,tema:"Formación"},
+];
+
+const PLANES = [
+  {id:"mensual",nombre:"Mensual",precio:"49,99",precioNum:4999,periodo:"mes",priceId:"price_1TYLoeLLznU33D90BoVamvik",
+    features:["Todas las CCAA (19)","Mercancías + Viajeros + Ampliación","Archivo completo 2009–2025","Descarga ilimitada PDF","Banco +8.000 preguntas","Simulador ilimitado","Soluciones comentadas"]},
+  {id:"anual",nombre:"Anual",precio:"139,99",precioNum:13999,periodo:"año",priceId:"price_1TYLpyLLznU33D90Z0mDugr8",ahorro:"= 11,67 €/mes",
+    features:["Todo el plan Mensual","2 meses gratis incluidos","Alertas nuevas convocatorias","Estadísticas de progreso","Soporte prioritario 24 h","Acceso anticipado"]},
+];
+
+const STRIPE_PK = "pk_live_51TYKS7LLznU33D90QESjlXOoKnUaAoqyq3GC0HSeYvPwNDsiftA8n2psOCgj1A0ZBNOWOwjEP9xBxu3rIcTHuEDN00kwrrnWAL";
+const BACKEND = "https://cap-pro-server.onrender.com";
+
+// ── ESTADO ─────────────────────────────────────────────────────────────────
+let planSeleccionado = null;
+let suscrito = false;
+let respuestas = {};
+let corregido = false;
+let examenActual = null;
+let filModal = '';
+
+// ── NAVEGACIÓN ─────────────────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const link = document.querySelector(`.nav-link[onclick="showPage('${id}')"]`);
+  if(link) link.classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='catalogo') renderExamenes();
+  if(id==='simulador') renderSimulador();
+  if(id==='precios') renderPlanes();
+  if(id==='inicio') animCounter();
+}
+
+function filterAndGo(modal) {
+  filModal = modal;
+  document.getElementById('fil-modal').value = modal;
+  showPage('catalogo');
+}
+
+// ── COUNTER ANIMADO ────────────────────────────────────────────────────────
+function animCounter() {
+  let c = 0;
+  const target = 8158;
+  const el = document.getElementById('counter');
+  if(!el) return;
+  const t = setInterval(()=>{
+    c = Math.min(c+137, target);
+    el.textContent = c.toLocaleString('es-ES');
+    if(c>=target) clearInterval(t);
+  },16);
+}
+
+// ── CCAA INICIO ────────────────────────────────────────────────────────────
+function renderCCAA() {
+  const el = document.getElementById('ccaa-inicio');
+  if(!el) return;
+  el.innerHTML = CCAA.map(c=>`<div class="ccaa-tag" onclick="filterByCCAA('${c}')">${c}</div>`).join('');
+  // Filtros select
+  const sel = document.getElementById('fil-ccaa');
+  if(sel) CCAA.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+}
+
+function filterByCCAA(c) {
+  document.getElementById('fil-ccaa').value = c;
+  showPage('catalogo');
+}
+
+// ── EXÁMENES ───────────────────────────────────────────────────────────────
+function getTagClass(m) { return m==='Mercancías'?'tag-merc':m==='Viajeros'?'tag-viaj':'tag-amp'; }
+function colorModal(m) { return m==='Mercancías'?'#1B4332':m==='Viajeros'?'#1A2B4A':'#4A3010'; }
+
+function renderExamenes() {
+  const ccaa = document.getElementById('fil-ccaa')?.value||'';
+  const modal = document.getElementById('fil-modal')?.value||'';
+  const norma = document.getElementById('fil-norma')?.value||'';
+  const anyo = document.getElementById('fil-anyo')?.value||'';
+  const list = EXAMENES.filter(e=>
+    (!ccaa||e.ccaa===ccaa)&&(!modal||e.modal===modal)&&(!norma||e.norma===norma)&&(!anyo||e.año.toString()===anyo)
+  );
+  const info = document.getElementById('cat-info');
+  if(info) info.innerHTML = `<strong style="color:var(--crema)">${list.length}</strong> convocatorias${!suscrito?` &nbsp;·&nbsp; <span style="color:var(--dorado);cursor:pointer;" onclick="showPage('precios')">🔒 Suscríbete para descargar</span>`:''}`;
+  const grid = document.getElementById('examenes-grid');
+  if(!grid) return;
+  if(!list.length){grid.innerHTML='<div style="text-align:center;padding:60px;color:rgba(248,245,239,.4);">— Sin resultados —</div>';return;}
+  grid.innerHTML = list.map(e=>`
+    <div class="examen-card" onclick="verDetalle(${e.id})">
+      <div class="examen-tags">
+        <span class="tag tag-ccaa">${e.ccaa}</span>
+        <span class="tag tag-modal ${getTagClass(e.modal)}">${e.modal}</span>
+      </div>
+      <div class="examen-titulo">${e.conv} Convocatoria · ${e.año}</div>
+      <div class="examen-sub">${e.preguntas} preguntas · ${e.norma}</div>
+      <div class="examen-stats">
+        <span><strong>${e.total}</strong> <span class="stat-grey">presentados</span></span>
+        <span><strong class="stat-ok">${Math.round(e.aprobados/e.total*100)}%</strong> <span class="stat-grey">aprobados</span></span>
+        <span style="margin-left:auto;">${suscrito?'<span style="color:var(--dorado);font-weight:600;">⬇ PDF</span>':'<span style="color:var(--verde4);">🔒</span>'}</span>
+      </div>
+    </div>`).join('');
+}
+
+function verDetalle(id) {
+  examenActual = EXAMENES.find(e=>e.id===id);
+  if(!examenActual) return;
+  const e = examenActual;
+  const tasa = Math.round(e.aprobados/e.total*100);
+  document.getElementById('detalle-content').innerHTML = `
+    <div class="detalle-header" style="background:${colorModal(e.modal)};">
+      <div class="detalle-eyebrow">${e.norma} · ${e.ccaa}</div>
+      <div class="detalle-titulo" style="font-family:'DM Serif Display',serif;font-size:1.7rem;margin-bottom:6px;color:var(--crema);">${e.conv} Convocatoria ${e.año}</div>
+      <div class="detalle-sub" style="font-size:.85rem;color:rgba(248,245,239,.65);">${e.modal} · ${e.preguntas} preguntas tipo test</div>
+    </div>
+    <div class="detalle-stats">
+      <div class="dstat"><div class="dstat-label">Presentados</div><div class="dstat-val" style="color:var(--crema);">${e.total}</div></div>
+      <div class="dstat"><div class="dstat-label">Aprobados</div><div class="dstat-val" style="color:var(--dorado);">${e.aprobados}</div></div>
+      <div class="dstat"><div class="dstat-label">Tasa</div><div class="dstat-val" style="color:var(--dorado);">${tasa}%</div></div>
+      <div class="dstat"><div class="dstat-label">Suspensos</div><div class="dstat-val" style="color:#F87171;">${e.total-e.aprobados}</div></div>
+    </div>
+    ${suscrito?
+      '<button class="btn-verde" style="width:100%;padding:14px;">⬇ Descargar examen en PDF</button>':
+      `<div class="lock-box">
+        <div class="lock-title">Contenido exclusivo para suscriptores</div>
+        <div class="lock-sub">Accede a este examen y a todo el archivo con cualquier plan.</div>
+        <button class="btn-dorado" onclick="showPage('precios')">Ver planes desde 49,99 €/mes</button>
+      </div>`
+    }`;
+  showPage('detalle');
+}
+
+// ── SIMULADOR ──────────────────────────────────────────────────────────────
+function renderSimulador() {
+  corregido = false;
+  const el = document.getElementById('sim-preguntas');
+  if(!el) return;
+  el.innerHTML = PREGUNTAS.map((p,i)=>`
+    <div class="pregunta-card">
+      <div class="pregunta-header">
+        <span class="tag" style="background:var(--verde);color:var(--dorado);border:1px solid var(--dorado);">Pregunta ${i+1}</span>
+        <span class="tag" style="background:var(--negro);color:rgba(248,245,239,.5);border:1px solid var(--verde4);">${p.tema}</span>
+      </div>
+      <div class="pregunta-text">${p.q}</div>
+      ${p.ops.map((op,j)=>`<button class="opcion" id="op-${i}-${j}" onclick="responder(${i},${j})"><strong style="color:var(--verde4);margin-right:8px;">${['A','B','C','D'][j]}.</strong>${op}</button>`).join('')}
+    </div>`).join('');
+  document.getElementById('sim-acciones').innerHTML = `<button class="btn-dorado" style="padding:12px 36px;" onclick="corregir()">Corregir examen</button>`;
+  document.getElementById('sim-resultado').innerHTML = '';
+  respuestas = {};
+}
+
+function responder(i,j) {
+  if(corregido) return;
+  if(respuestas[i]!==undefined) {
+    document.getElementById(`op-${i}-${respuestas[i]}`).classList.remove('sel');
+  }
+  respuestas[i]=j;
+  document.getElementById(`op-${i}-${j}`).classList.add('sel');
+}
+
+function corregir() {
+  corregido = true;
+  let pts = 0;
+  PREGUNTAS.forEach((p,i)=>{
+    p.ops.forEach((_,j)=>{
+      const el = document.getElementById(`op-${i}-${j}`);
+      el.classList.remove('sel');
+      if(j===p.ok) el.classList.add('ok');
+      else if(respuestas[i]===j) el.classList.add('err');
+    });
+    if(respuestas[i]===undefined) return;
+    respuestas[i]===p.ok ? pts+=1 : pts-=0.5;
+  });
+  pts = Math.max(0,pts);
+  const aprobado = pts >= 3.5;
+  document.getElementById('sim-acciones').innerHTML = '';
+  document.getElementById('sim-resultado').innerHTML = `
+    <div class="resultado-box">
+      <div style="font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dorado);margin-bottom:8px;">Tu resultado</div>
+      <div class="resultado-num" style="color:${aprobado?'var(--dorado)':'#F87171'}">${pts.toFixed(1)} / ${PREGUNTAS.length}</div>
+      <div style="font-size:.85rem;color:rgba(248,245,239,.6);margin:8px 0 18px;">${aprobado?'✓ Aprobado en esta muestra':'✗ Suspendido en esta muestra'} · Mínimo real: 50/100 puntos</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-dorado" onclick="showPage('precios')">Acceder a los 8.000+ exámenes</button>
+        <button class="btn-ghost" onclick="renderSimulador()">Repetir muestra</button>
+      </div>
+    </div>`;
+}
+
+// ── PLANES ────────────────────────────────────────────────────────────────
+function renderPlanes() {
+  const el = document.getElementById('planes-grid');
+  if(!el) return;
+  el.innerHTML = PLANES.map(p=>`
+    <div class="plan-card ${planSeleccionado?.id===p.id?'selected':''}" onclick="selPlan('${p.id}')">
+      ${p.ahorro?`<div class="plan-badge">${p.ahorro}</div>`:''}
+      <div style="display:flex;justify-content:space-between;margin-bottom:14px;">
+        <div style="width:10px;height:10px;background:var(--dorado);border-radius:2px;"></div>
+        <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--dorado);background:${planSeleccionado?.id===p.id?'var(--dorado)':'transparent'};display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#1C1C1C;font-weight:700;">${planSeleccionado?.id===p.id?'✓':''}</div>
+      </div>
+      <div class="plan-nombre">${p.nombre}</div>
+      <div><span class="plan-precio">${p.precio} €</span> <span class="plan-periodo">/${p.periodo}</span></div>
+      <div class="plan-features">
+        ${p.features.map(f=>`<div class="feature"><span class="feature-ok">✓</span><span>${f}</span></div>`).join('')}
+      </div>
+    </div>`).join('');
+  actualizarPlanInfo();
+}
+
+function selPlan(id) {
+  planSeleccionado = PLANES.find(p=>p.id===id);
+  renderPlanes();
+}
+
+function actualizarPlanInfo() {
+  const el = document.getElementById('plan-sel-info');
+  if(el) el.textContent = planSeleccionado ? `Plan seleccionado: ${planSeleccionado.nombre} — ${planSeleccionado.precio} €/${planSeleccionado.periodo}` : 'Selecciona un plan arriba';
+}
+
+async function iniciarPago() {
+  const nombre = document.getElementById('inp-nombre').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  if(!nombre||!email){alert('Por favor rellena tu nombre y email.');return;}
+  if(!planSeleccionado){alert('Por favor selecciona un plan.');return;}
+  const btn = document.querySelector('.btn-stripe');
+  btn.textContent = '⏳ Conectando con Stripe…';
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${BACKEND}/create-checkout-session`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({priceId:planSeleccionado.priceId,email,nombre})
+    });
+    const data = await res.json();
+    if(data.url) window.location.href = data.url;
+    else throw new Error(data.error||'Error');
+  } catch(e) {
+    btn.textContent = '🔒 Pagar con Stripe';
+    btn.disabled = false;
+    alert('Error al conectar con Stripe: '+e.message);
+  }
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+renderCCAA();
+animCounter();
+</script>
+</body>
+</html>
