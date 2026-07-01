@@ -14,24 +14,15 @@ jobs:
           import os, logging, psycopg2
           logging.basicConfig(level=logging.INFO)
           log = logging.getLogger(__name__)
-          host = os.environ["DB_HOST"]
-          port = os.environ.get("DB_PORT","5432")
-          user = os.environ["DB_USER"]
-          pwd = os.environ["DB_PASSWORD"]
-          log.info(f"HOST=[{host}] LEN={len(host)}")
-          log.info(f"PORT=[{port}]")
-          log.info(f"USER=[{user}] LEN={len(user)}")
-          log.info(f"PWD_LEN={len(pwd)}")
-          conn = psycopg2.connect(
-              host=host, port=int(port), dbname=os.environ["DB_NAME"],
-              user=user, password=pwd, sslmode="require"
-          )
+          dsn = os.environ["DATABASE_URL"]
+          log.info(f"DSN_LEN={len(dsn)}")
+          conn = psycopg2.connect(dsn, sslmode="require")
           log.info("Conexion OK")
+          cur = conn.cursor()
+          cur.execute("select count(*) from comunidades_autonomas;")
+          log.info(f"Comunidades en BD: {cur.fetchone()[0]}")
           conn.close()
           EOF
         env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
