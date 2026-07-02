@@ -14,6 +14,14 @@ DB_PASSWORD = os.environ["DB_PASSWORD"].strip()
 
 KEYWORDS = ["convocatoria", "examen", "cap", "certificado", "aptitud"]
 
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
+    "Referer": "https://www.google.com/",
+    "Connection": "keep-alive",
+}
+
 def get_conn():
     return psycopg2.connect(
         host=DB_HOST, port=DB_PORT, dbname=DB_NAME,
@@ -44,12 +52,15 @@ def main():
     cur.execute("select id, nombre, slug, url_fuente from comunidades_autonomas where activo = true;")
     comunidades = cur.fetchall()
 
+    session = requests.Session()
+    session.headers.update(HEADERS)
+
     total_nuevas = 0
     for comunidad_id, nombre, slug, url in comunidades:
         url = url.strip()
         log.info(f"Revisando {nombre} -> {url}")
         try:
-            resp = requests.get(url, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+            resp = session.get(url, timeout=20)
             resp.raise_for_status()
         except Exception as e:
             log.warning(f"  Error accediendo a {nombre}: {e}")
