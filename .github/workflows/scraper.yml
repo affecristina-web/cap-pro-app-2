@@ -11,7 +11,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install psycopg2-binary requests beautifulsoup4
+      - run: pip install psycopg2-binary requests beautifulsoup4 playwright
+      - run: playwright install --with-deps chromium
       - run: python scraper.py
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
