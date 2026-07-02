@@ -27,6 +27,7 @@ def get_conn():
         host=DB_HOST, port=DB_PORT, dbname=DB_NAME,
         user=DB_USER, password=DB_PASSWORD, sslmode="require"
     )
+
 def find_pdf_links(base_url, html):
     soup = BeautifulSoup(html, "html.parser")
     links = []
@@ -38,12 +39,24 @@ def find_pdf_links(base_url, html):
             href_lower.endswith(".pdf")
             or href_lower.endswith("/download")
             or "/medias/" in href_lower
+            or "/documents/d/" in href_lower
+            or "(pdf" in text
         )
         if is_doc and any(k in href_lower or k in text for k in KEYWORDS):
             full_url = requests.compat.urljoin(base_url, href)
             titulo = a.get_text(strip=True) or href
             links.append((full_url, titulo))
     return links
+
+def fetch_with_playwright(url):
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(user_agent=HEADERS["User-Agent"])
+        page.goto(url, timeout=30000, wait_until="networkidle")
+        html = page.content()
+        browser.close()
+        return html
 
 def main():
     conn = get_conn()
@@ -58,14 +71,24 @@ def main():
     for comunidad_id, nombre, slug, url in comunidades:
         url = url.strip()
         log.info(f"Revisando {nombre} -> {url}")
+        html = None
         try:
             resp = session.get(url, timeout=20)
             resp.raise_for_status()
+            html = resp.text
         except Exception as e:
             log.warning(f"  Error accediendo a {nombre}: {e}")
-            continue
 
-        pdfs = find_pdf_links(url, resp.text)
+        pdfs = find_pdf_links(url, html) if html else []
+
+        if not pdfs:
+            log.info(f"  0 resultados con requests, probando con Playwright (JS)...")
+            try:
+                html_js = fetch_with_playwright(url)
+                pdfs = find_pdf_links(url, html_js)
+            except Exception as e:
+                log.warning(f"  Error con Playwright en {nombre}: {e}")
+
         log.info(f"  Encontrados {len(pdfs)} PDFs candidatos")
 
         for pdf_url, titulo in pdfs:
@@ -89,4 +112,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
