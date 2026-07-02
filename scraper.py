@@ -1,4 +1,4 @@
-import os, logging
+import os, re, logging
 import psycopg2
 import requests
 from bs4 import BeautifulSoup
@@ -48,15 +48,26 @@ def find_pdf_links(base_url, html):
             links.append((full_url, titulo))
     return links
 
-def fetch_with_playwright(url):
-    from playwright.sync_api import sync_playwright
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page(user_agent=HEADERS["User-Agent"])
-        page.goto(url, timeout=30000, wait_until="networkidle")
-        html = page.content()
-        browser.close()
-        return html
+def find_links_from_text(text):
+    urls = re.findall(r'https?://[^\s\)\]]+', text)
+    links = []
+    for u in urls:
+        u_lower = u.lower()
+        is_doc = (
+            u_lower.endswith(".pdf")
+            or u_lower.endswith("/download")
+            or "/medias/" in u_lower
+            or "/documents/d/" in u_lower
+        )
+        if is_doc and any(k in u_lower for k in KEYWORDS):
+            links.append((u, u))
+    return links
+
+def fetch_via_jina(url):
+    proxy_url = "https://r.jina.ai/" + url
+    resp = requests.get(proxy_url, timeout=30, headers={"User-Agent": HEADERS["User-Agent"]})
+    resp.raise_for_status()
+    return resp.text
 
 def main():
     conn = get_conn()
@@ -71,23 +82,22 @@ def main():
     for comunidad_id, nombre, slug, url in comunidades:
         url = url.strip()
         log.info(f"Revisando {nombre} -> {url}")
-        html = None
-        try:
-            resp = session.get(url, timeout=20)
-            resp.raise_for_status()
-            html = resp.text
-        except Exception as e:
-            log.warning(f"  Error accediendo a {nombre}: {e}")
+        pdfs = []
 
-        pdfs = find_pdf_links(url, html) if html else []
+        try:
+            resp = session.get(url, timeout=15)
+            resp.raise_for_status()
+            pdfs = find_pdf_links(url, resp.text)
+        except Exception as e:
+            log.warning(f"  requests directo fallo en {nombre}: {e}")
 
         if not pdfs:
-            log.info(f"  0 resultados con requests, probando con Playwright (JS)...")
+            log.info(f"  0 resultados directos, probando via Jina Reader...")
             try:
-                html_js = fetch_with_playwright(url)
-                pdfs = find_pdf_links(url, html_js)
+                text = fetch_via_jina(url)
+                pdfs = find_links_from_text(text)
             except Exception as e:
-                log.warning(f"  Error con Playwright en {nombre}: {e}")
+                log.warning(f"  Error con Jina Reader en {nombre}: {e}")
 
         log.info(f"  Encontrados {len(pdfs)} PDFs candidatos")
 
