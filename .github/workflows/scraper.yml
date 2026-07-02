@@ -14,16 +14,14 @@ jobs:
           import os, logging, psycopg2
           logging.basicConfig(level=logging.INFO)
           log = logging.getLogger(__name__)
-          pwd = os.environ["DB_PASSWORD"]
-          log.info(f"PWD_LEN={len(pwd)} FIRST={pwd[0]} LAST={pwd[-1]}")
-          user = os.environ["DB_USER"]
-          log.info(f"USER_LEN={len(user)} FIRST={user[0]} LAST={user[-1]}")
+          host = os.environ["DB_HOST"]
+          log.info(f"HOST_EXACT=[{host}]")
           conn = psycopg2.connect(
-              host=os.environ["DB_HOST"],
+              host=host,
               port=int(os.environ.get("DB_PORT", "5432")),
               dbname=os.environ["DB_NAME"],
-              user=user,
-              password=pwd,
+              user=os.environ["DB_USER"],
+              password=os.environ["DB_PASSWORD"],
               sslmode="require"
           )
           log.info("Conexion OK")
