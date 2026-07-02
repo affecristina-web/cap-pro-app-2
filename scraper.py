@@ -27,7 +27,6 @@ def get_conn():
         host=DB_HOST, port=DB_PORT, dbname=DB_NAME,
         user=DB_USER, password=DB_PASSWORD, sslmode="require"
     )
-
 def find_pdf_links(base_url, html):
     soup = BeautifulSoup(html, "html.parser")
     links = []
@@ -90,3 +89,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
