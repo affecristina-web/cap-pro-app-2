@@ -26,11 +26,16 @@ def find_pdf_links(base_url, html):
     for a in soup.find_all("a", href=True):
         href = a["href"]
         text = (a.get_text() or "").lower()
-        if href.lower().endswith(".pdf"):
-            if any(k in href.lower() or k in text for k in KEYWORDS):
-                full_url = requests.compat.urljoin(base_url, href)
-                titulo = a.get_text(strip=True) or href
-                links.append((full_url, titulo))
+        href_lower = href.lower()
+        is_doc = (
+            href_lower.endswith(".pdf")
+            or href_lower.endswith("/download")
+            or "/medias/" in href_lower
+        )
+        if is_doc and any(k in href_lower or k in text for k in KEYWORDS):
+            full_url = requests.compat.urljoin(base_url, href)
+            titulo = a.get_text(strip=True) or href
+            links.append((full_url, titulo))
     return links
 
 def main():
@@ -41,6 +46,7 @@ def main():
 
     total_nuevas = 0
     for comunidad_id, nombre, slug, url in comunidades:
+        url = url.strip()
         log.info(f"Revisando {nombre} -> {url}")
         try:
             resp = requests.get(url, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
