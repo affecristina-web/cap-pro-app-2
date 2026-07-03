@@ -108,7 +108,8 @@ def main():
             cur.execute(
                 """
                 insert into convocatorias (comunidad_id, url_pdf, titulo, estado)
-                values (%s, %s, %s, 'pendiente')
+                values (%s, %s, %s, 'publicado')
+
                 """,
                 (comunidad_id, pdf_url, titulo)
             )
