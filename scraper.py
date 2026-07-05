@@ -41,15 +41,18 @@ def find_pdf_links(base_url, html):
     for a in soup.find_all("a", href=True):
         href = a["href"]
         text = (a.get_text() or "").lower()
+        contexto = (a.parent.get_text() or "").lower() if a.parent else ""
         href_lower = href.lower()
         is_doc = (
             href_lower.endswith(".pdf")
             or href_lower.endswith("/download")
             or "/medias/" in href_lower
             or "/documents/d/" in href_lower
+            or "/dog/publicados/" in href_lower
             or "(pdf" in text
         )
-        if is_doc and es_convocatoria_valida(href_lower + " " + text):
+        contenido = href_lower + " " + text + " " + contexto
+        if is_doc and es_convocatoria_valida(contenido):
             full_url = requests.compat.urljoin(base_url, href)
             titulo = a.get_text(strip=True) or href
             links.append((full_url, titulo))
@@ -65,6 +68,7 @@ def find_links_from_text(text):
             or u_lower.endswith("/download")
             or "/medias/" in u_lower
             or "/documents/d/" in u_lower
+            or "/dog/publicados/" in u_lower
         )
         if is_doc and es_convocatoria_valida(u_lower):
             links.append((u, u))
@@ -146,4 +150,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
