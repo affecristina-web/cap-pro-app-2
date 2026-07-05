@@ -13,12 +13,13 @@ DB_USER = os.environ["DB_USER"].strip()
 DB_PASSWORD = os.environ["DB_PASSWORD"].strip()
 
 KEYWORDS = ["convocatoria", "examen", "cap", "certificado", "aptitud"]
+PALABRAS_EXCLUIDAS = ["tasa", "tasas", "tributo", "tributos", "conformidad", "ens_"]
 
 def es_convocatoria_valida(texto_o_url):
     t = texto_o_url.lower()
-    tiene_aptitud_o_convocatoria = "aptitud" in t or "convocatoria" in t
-    tiene_cap_o_examen = "cap" in t or "examen" in t
-    return tiene_aptitud_o_convocatoria and tiene_cap_o_examen
+    if any(p in t for p in PALABRAS_EXCLUIDAS):
+        return False
+    return any(k in t for k in KEYWORDS)
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -145,3 +146,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
