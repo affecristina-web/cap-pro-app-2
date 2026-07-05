@@ -12,7 +12,7 @@ DB_NAME = os.environ["DB_NAME"].strip()
 DB_USER = os.environ["DB_USER"].strip()
 DB_PASSWORD = os.environ["DB_PASSWORD"].strip()
 
-KEYWORDS = ["convocatoria", "examen", "cap", "certificado", "aptitud"]
+KEYWORDS = ["convocatoria", "examen", "cap", "certificado", "aptitud", "aptos", "admitidos"]
 PALABRAS_EXCLUIDAS = ["tasa", "tasas", "tributo", "tributos", "conformidad", "ens_"]
 
 def es_convocatoria_valida(texto_o_url):
@@ -20,6 +20,16 @@ def es_convocatoria_valida(texto_o_url):
     if any(p in t for p in PALABRAS_EXCLUIDAS):
         return False
     return any(k in t for k in KEYWORDS)
+
+def obtener_contexto(tag, niveles=2):
+    textos = []
+    nodo = tag
+    for _ in range(niveles):
+        nodo = nodo.parent
+        if nodo is None:
+            break
+        textos.append(nodo.get_text() or "")
+    return " ".join(textos).lower()
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -41,10 +51,10 @@ def find_pdf_links(base_url, html):
     for a in soup.find_all("a", href=True):
         href = a["href"]
         text = (a.get_text() or "").lower()
-        contexto = (a.parent.get_text() or "").lower() if a.parent else ""
+        contexto = obtener_contexto(a, 2)
         href_lower = href.lower()
         is_doc = (
-            href_lower.endswith(".pdf")
+            ".pdf" in href_lower
             or href_lower.endswith("/download")
             or "/medias/" in href_lower
             or "/documents/d/" in href_lower
@@ -64,7 +74,7 @@ def find_links_from_text(text):
     for u in urls:
         u_lower = u.lower()
         is_doc = (
-            u_lower.endswith(".pdf")
+            ".pdf" in u_lower
             or u_lower.endswith("/download")
             or "/medias/" in u_lower
             or "/documents/d/" in u_lower
@@ -95,6 +105,7 @@ def main():
         url = url.strip()
         log.info(f"Revisando {nombre} -> {url}")
         pdfs = []
+        resp = None
 
         try:
             resp = session.get(url, timeout=25)
@@ -118,6 +129,8 @@ def main():
                 pdfs = find_links_from_text(text)
             except Exception as e:
                 log.warning(f"  Error con Jina Reader en {nombre}: {e}")
+            if not pdfs and slug == "castilla-y-leon" and resp is not None:
+                log.warning(f"  DEBUG Castilla y León - longitud HTML: {len(resp.text)} - primeros 300 caracteres: {resp.text[:300]!r}")
 
         log.info(f"  Encontrados {len(pdfs)} PDFs candidatos")
 
