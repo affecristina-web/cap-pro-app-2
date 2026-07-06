@@ -59,6 +59,7 @@ def find_pdf_links(base_url, html):
             or "/medias/" in href_lower
             or "/documents/d/" in href_lower
             or "/dog/publicados/" in href_lower
+            or "/boc/" in href_lower
             or "(pdf" in text
         )
         contenido = href_lower + " " + text + " " + contexto
@@ -79,6 +80,7 @@ def find_links_from_text(text):
             or "/medias/" in u_lower
             or "/documents/d/" in u_lower
             or "/dog/publicados/" in u_lower
+            or "/boc/" in u_lower
         )
         if is_doc and es_convocatoria_valida(u_lower):
             links.append((u, u))
@@ -129,8 +131,6 @@ def main():
                 pdfs = find_links_from_text(text)
             except Exception as e:
                 log.warning(f"  Error con Jina Reader en {nombre}: {e}")
-            if not pdfs and slug == "castilla-y-leon" and resp is not None:
-                log.warning(f"  DEBUG Castilla y León - longitud HTML: {len(resp.text)} - primeros 300 caracteres: {resp.text[:300]!r}")
 
         log.info(f"  Encontrados {len(pdfs)} PDFs candidatos")
 
@@ -163,3 +163,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+        
