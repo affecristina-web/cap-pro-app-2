@@ -61,6 +61,7 @@ def find_pdf_links(base_url, html):
             or "/dog/publicados/" in href_lower
             or "/boc/" in href_lower
             or "dogv.gva.es" in href_lower
+            or "borm.es" in href_lower
             or "(pdf" in text
         )
         contenido = href_lower + " " + text + " " + contexto
@@ -83,6 +84,7 @@ def find_links_from_text(text):
             or "/dog/publicados/" in u_lower
             or "/boc/" in u_lower
             or "dogv.gva.es" in u_lower
+            or "borm.es" in u_lower
         )
         if is_doc and es_convocatoria_valida(u_lower):
             links.append((u, u))
@@ -165,5 +167,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-          
